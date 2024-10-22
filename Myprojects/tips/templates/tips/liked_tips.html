@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Liked Tips</title>
+</head>
+<body>
+    {% extends 'tips/base.html' %}
+
+    {% block content %}
+    <div class="container mt-5">
+        <h2>Liked Tips</h2>
+        <hr style="border: solid; color: #22a137;">
+
+        {% for tip in tips %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ tip.title }}</h5>
+                <p class="card-text">{{ tip.content }}</p>
+                {% if tip.image %}
+                    <img src="{{ tip.image.url }}" class="img-fluid" alt="{{ tip.title }}">
+                {% endif %}
+                <p><small>By {{ tip.author.username }} on {{ tip.created_at }}</small></p>
+                
+                <div class="d-flex justify-content-between">
+                    <form action="{% url 'remove_like' tip.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Remove Like</button>
+                    </form>
+                    
+                    <div>
+                        <a href="https://twitter.com/share?text={{ tip.title }}&url={{ request.build_absolute_uri }}" target="_blank" class="btn btn-info">Share on Twitter</a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-primary">Share on Facebook</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not tips %}
+            <p>No liked tips found.</p>
+        {% endif %}
+    </div>
+    {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+</body>
+</html>

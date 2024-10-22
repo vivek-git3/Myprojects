@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- tips/templates/tips/tip_detail.html -->
+
+{% extends 'tips/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ tip.title }}</h1>
+    
+    {% if tip.image %}
+        <img src="{{ tip.image.url }}" alt="{{ tip.title }}" class="img-fluid mb-3">
+    {% endif %}
+    
+    <p>{{ tip.content }}</p>
+    <p><strong>Category:</strong> {{ tip.category.name }}</p>
+    <p><strong>Likes:</strong> {{ tip.total_likes }}</p>
+    <p><strong>Created At:</strong> {{ tip.created_at|date:"D, d M Y H:i:s" }}</p>
+
+    <!-- Change the URL to point back to the home page -->
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}
+
+</body>
+</html>

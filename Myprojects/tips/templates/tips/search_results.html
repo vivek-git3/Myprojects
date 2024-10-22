@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- tips/templates/tips/search_results.html -->
+
+{% extends 'tips/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Search Results for "{{ query }}"</h1>
+
+    {% if tips %}
+        <div class="row">
+            {% for tip in tips %}
+            <div class="col-md-4 mb-4">
+                <a href="{% url 'tip_detail' tip.id %}" class="text-decoration-none">
+                    <div class="tip-card border rounded shadow-sm p-3 h-100">
+                        <h3 class="text-success">{{ tip.title }}</h3>
+                        <p>{{ tip.content|truncatewords:20 }}</p>
+                        {% if tip.image %}
+                            <img src="{{ tip.image.url }}" alt="{{ tip.title }}" class="img-fluid rounded mb-2">
+                        {% endif %}
+                        <p class="text-muted">Category: {{ tip.category.name }}</p>
+                        <p class="text-muted">Likes: {{ tip.total_likes }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No tips found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+</body>
+</html>

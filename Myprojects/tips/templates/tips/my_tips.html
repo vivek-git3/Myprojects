@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'tips/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>My Tips</h1>
+    <hr style="border: solid; color: #22a137;">
+
+    {% if tips %}
+        <div class="row">
+            {% for tip in tips %}
+            <div class="col-md-4 mb-4">
+                <div class="tip-card border rounded shadow-sm p-3 h-100">
+                    <h3>{{ tip.title }}</h3>
+                    <p>Author: {{ tip.author.username }}</p>
+                    <p>{{ tip.content|truncatewords:20 }}</p>
+                    {% if tip.image %}
+                        <img src="{{ tip.image.url }}" alt="{{ tip.title }}" class="img-fluid rounded mb-2">
+                    {% endif %}
+                    <p>Category: {{ tip.category.name }}</p>
+                    <p>Likes: {{ tip.total_likes }}</p>
+                    <a href="{% url 'edit_tip' tip.id %}" class="btn btn-warning">Edit</a>
+                    <form action="{% url 'delete_tip' tip.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No tips available.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'tips/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Share Tip: {{ tip.title }}</h2>
+    <p>{{ tip.content }}</p>
+    {% if tip.image %}
+        <img src="{{ tip.image.url }}" alt="{{ tip.title }}" class="img-fluid">
+    {% endif %}
+    
+    <h3>Share this tip:</h3>
+    <a href="https://twitter.com/share?text={{ tip.title }}&url={{ request.build_absolute_uri }}" target="_blank" class="btn btn-info">Share on Twitter</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-primary">Share on Facebook</a>
+    
+    <h4>Copy this link:</h4>
+    <input type="text" value="{{ request.build_absolute_uri }}" id="shareLink" readonly>
+    <button onclick="copyToClipboard()">Copy Link</button>
+    
+    <script>
+        function copyToClipboard() {
+            var copyText = document.getElementById("shareLink");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Link copied to clipboard!");
+        }
+    </script>
+</div>
+{% endblock %}
+
+</body>
+</html>

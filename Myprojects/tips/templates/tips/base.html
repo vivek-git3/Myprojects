@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Cooktip</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding-top: 30px;
+        }
+        .content {
+            min-height: calc(100vh - 56px); /* Adjust based on header/footer height */
+            padding-bottom: 60px; /* Space for the footer */
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px; /* Set your desired footer height */
+            line-height: 60px; /* Center text vertically */
+            background-color: #343a40; /* Dark background */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-success bg-success fixed-top">
+        <a class="navbar-brand text-white" href="/">Cooktip</a>
+        <div class="collapse navbar-collapse">
+            <!-- Combined Category Dropdown and Search Form -->
+            <form method="GET" action="{% url 'home' %}" class="form-inline">
+                <select name="category" id="category-select" class="form-control mr-2">
+                    <option value="">Select Category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="query" id="search" class="form-control" placeholder="Search..." style="width: 300px;" value="{{ request.GET.query }}">
+                <button type="submit" class="btn btn-light ml-2">Search</button>
+            </form>
+
+            {% if user.is_authenticated %}
+                <div class="ml-auto">
+                    <a href="{% url 'add_tip' %}" class="btn btn-light">Add Tips</a>
+                    <a href="{% url 'my_tips' %}" class="btn btn-light">My Tips</a>
+                    <a href="{% url 'liked_tips' %}" class="btn btn-light">Liked Tips</a>
+                    <a href="{% url 'logout' %}" class="btn btn-light">Logout</a>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="ml-auto btn btn-light">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container mt-5 content">
+        {% block content %}
+        <h1>Recent Tips</h1>
+        <hr style="border: solid; color: #22a137;">
+
+        {% if tips %}
+            <div class="row">
+                {% for tip in tips %}
+                <div class="col-md-4 mb-4">
+                    <div class="tip-card border rounded shadow-sm p-3 h-100">
+                        <h3 class="text-success">{{ tip.title }}</h3>
+                        <p>Author: {{ tip.author.username }}</p>
+                        <p>{{ tip.content|truncatewords:20 }}</p>
+                        {% if tip.image %}
+                            <img src="{{ tip.image.url }}" alt="{{ tip.title }}" class="img-fluid rounded mb-2">
+                        {% endif %}
+                        <p class="text-muted">Category: {{ tip.category.name }}</p>
+                        <p class="text-muted">Likes: {{ tip.total_likes }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No tips available.</p>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<footer class="bg-dark text-white text-center py-2">
+    <div class="container">
+        <p>&copy; {{ current_year }} Cooktip. All rights reserved.</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="text-white">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Contact Us</a></li>
+        </ul>
+    </div>
+</footer>
+</html>
