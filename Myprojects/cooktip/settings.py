@@ -35,9 +35,9 @@ EMAIL_HOST_PASSWORD = 'vivek@1999'
 SECRET_KEY = 'django-insecure-+ksom(@y45e+yyk%xx+=aerxy849$!ep_i-yk)aj9#f-ny&g+b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['']
 
 
 # Application definition
